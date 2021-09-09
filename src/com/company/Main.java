@@ -5,10 +5,10 @@ import java.util.Scanner;
 
 public class Main {
 
-    School preSchool = new PreSchool();
-    School elementarySchool = new ElementarySchool();
-    School middleSchool = new MiddleSchool();
-    School highSchool = new HighSchool();
+    static School preSchool = new PreSchool();
+    static School elementarySchool = new ElementarySchool();
+    static School middleSchool = new MiddleSchool();
+    static School highSchool = new HighSchool();
 
     public static void main(String[] args) {
 
@@ -20,12 +20,12 @@ public class Main {
 
             // Taking Name of student if not match Condition, it will ask again
             System.out.println("Enter the name of the student :    (no less than 3 chars and no more than 50 chars)\n");
-            String name = getName();
+            String name = getInput();
             do {
                 if (name.length() < 3 || name.length() > 50) {
                     System.out.println(name.length());
                     System.out.print(" name should be >=3 characters or less than <=50\n");
-                    name = getName();
+                    name = getInput();
                 }else {
                     break;
                 }
@@ -33,14 +33,14 @@ public class Main {
 
             // Taking Birth Date of student if not match Condition, it will ask again
             System.out.println("Date of Birth of the student: ( mm/dd/yyyy ) In This Format");
-            String dateOfBirth = getAge();
+            String dateOfBirth = getInput();
             int age;
             do{
                 age = findAge(dateOfBirth);
                 System.out.println(age);
                 if (age < 4 || age > 17) {
                     System.out.println("No Schools Available\n");
-                    dateOfBirth = getAge();
+                    dateOfBirth = getInput();
                 }
                 else
                 {
@@ -48,13 +48,76 @@ public class Main {
                 }
             }while (true);
 
+            // Finding Grade for the Student
+            GradeType gradeType = null;
             try {
-                GradeType gradeType = determineGradeBasedOnAge(age);
+                gradeType = determineGradeBasedOnAge(age);
             } catch (AgeNotCorrectException e) {
                 e.getMessage();
+            }finally {
+                System.out.println(gradeType);
             }
+
+
+            //Finding Class Type for the Student
+            SchoolType schoolType = null;
+            schoolType = getSchoolTypeBasedOnGradetype(gradeType);
+            String grade = String.valueOf(gradeType);
+            Student student = new Student(name,age,grade);
+
+            // Finding School Object
+            School school = getSchoolObject(schoolType);
+            try {
+                school.admitStudent(student);
+            } catch (ClassFullException e) {
+                System.out.println("Sorry Class for grade " + grade + "is full try another student");
+            }
+
+
         }
 
+    }
+
+    private static School getSchoolObject(SchoolType schoolType) {
+        switch (schoolType) {
+            case PRE_SCHOOL:
+                return preSchool;
+            case ELEMENTARY_SCHOOL:
+                return elementarySchool;
+            case MIDDLE_SCHOOL:
+                return middleSchool;
+            case HIGH_SCHOOL:
+                return highSchool;
+            default:
+                throw new IllegalArgumentException("Wrong School Type");
+        }
+    }
+
+    private static SchoolType getSchoolTypeBasedOnGradetype(GradeType gradeType) {
+        System.out.println("Determining School Level based on grade !!!");
+        switch (gradeType)
+        {
+            case JK_GRADE:
+            case SK_GRADE:
+                return SchoolType.PRE_SCHOOL;
+            case FIRST_GRADE:
+            case SECOND_GRADE:
+            case THIRD_GRADE:
+            case FOURTH_GRADE:
+            case FIFTH_GRADE:
+                return  SchoolType.ELEMENTARY_SCHOOL;
+            case SIXTH_GRADE:
+            case SEVENTH_GRADE:
+            case EIGHTH_GRADE:
+                return SchoolType.MIDDLE_SCHOOL;
+            case NINTH_GRADE:
+            case TENTH_GRADE:
+            case ELEVENTH_GRADE:
+            case TWELFTH_GRADE:
+                return SchoolType.HIGH_SCHOOL;
+            default:
+                throw new IllegalArgumentException("Not a Valid GradeType");
+        }
     }
 
     private static int findAge(String dateOfBirth) {
@@ -68,21 +131,13 @@ public class Main {
         return localYear - birthYear;
     }
 
-
-    private static String getAge() {
+    private static String getInput() {
         Scanner scanner = new Scanner(System.in);
-        String age;
-        return age = scanner.nextLine();
-    }
-
-    private static String getName() {
-        Scanner scanner = new Scanner(System.in);
-        String name;
-        return name = scanner.nextLine();
+        return scanner.nextLine();
     }
 
     private static GradeType determineGradeBasedOnAge(int age) throws AgeNotCorrectException {
-
+        System.out.println("Determining Grade Type based on age of the student !!!");
         switch (age)
         {
             case 4:
