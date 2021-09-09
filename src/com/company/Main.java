@@ -1,5 +1,6 @@
 package com.company;
 
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Main {
@@ -17,7 +18,7 @@ public class Main {
 
         while (true) {
 
-            // Taking Name of student if not match Condition it will ask again
+            // Taking Name of student if not match Condition, it will ask again
             System.out.println("Enter the name of the student :    (no less than 3 chars and no more than 50 chars)\n");
             String name = getName();
             do {
@@ -30,13 +31,16 @@ public class Main {
                 }
             }while (true);
 
-            // Taking Age of student if not match Condition it will ask again
-            System.out.println("age of the student: ");
-            int age = getAge();
+            // Taking Birth Date of student if not match Condition, it will ask again
+            System.out.println("Date of Birth of the student: ( mm/dd/yyyy ) In This Format");
+            String dateOfBirth = getAge();
+            int age;
             do{
-                if (age < 4 || age >= 17) {
+                age = findAge(dateOfBirth);
+                System.out.println(age);
+                if (age < 4 || age > 17) {
                     System.out.println("No Schools Available\n");
-                    age = getAge();
+                    dateOfBirth = getAge();
                 }
                 else
                 {
@@ -44,24 +48,31 @@ public class Main {
                 }
             }while (true);
 
-
             try {
                 GradeType gradeType = determineGradeBasedOnAge(age);
             } catch (AgeNotCorrectException e) {
                 e.getMessage();
             }
-
-
         }
 
     }
 
+    private static int findAge(String dateOfBirth) {
+
+        LocalDate localDate = LocalDate.now();
+        int localYear = localDate.getYear();
+        System.out.println(localYear);
+
+        int birthYear = Integer.parseInt(dateOfBirth.substring(6,10));
+        System.out.println(birthYear);
+        return localYear - birthYear;
+    }
 
 
-    private static int getAge() {
+    private static String getAge() {
         Scanner scanner = new Scanner(System.in);
-        int age;
-        return age = scanner.nextInt();
+        String age;
+        return age = scanner.nextLine();
     }
 
     private static String getName() {
