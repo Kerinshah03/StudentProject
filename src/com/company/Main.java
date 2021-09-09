@@ -3,12 +3,16 @@ package com.company;
 import java.time.LocalDate;
 import java.util.Scanner;
 
+import static java.lang.System.exit;
+
 public class Main {
 
     static School preSchool = new PreSchool();
     static School elementarySchool = new ElementarySchool();
     static School middleSchool = new MiddleSchool();
     static School highSchool = new HighSchool();
+    static Scanner scanner = new Scanner(System.in);
+
 
     public static void main(String[] args) {
 
@@ -20,12 +24,14 @@ public class Main {
 
             // Taking Name of student if not match Condition, it will ask again
             System.out.println("Enter the name of the student :    (no less than 3 chars and no more than 50 chars)\n");
-            String name = getInput();
+            String name = getStringInput();
+            checkExit(name);
             do {
                 if (name.length() < 3 || name.length() > 50) {
                     System.out.println(name.length());
                     System.out.print(" name should be >=3 characters or less than <=50\n");
-                    name = getInput();
+                    name = getStringInput();
+                    checkExit(name);
                 }else {
                     break;
                 }
@@ -33,14 +39,16 @@ public class Main {
 
             // Taking Birth Date of student if not match Condition, it will ask again
             System.out.println("Date of Birth of the student: ( mm/dd/yyyy ) In This Format");
-            String dateOfBirth = getInput();
+            String dateOfBirth = getStringInput();
+            checkExit(dateOfBirth);
             int age;
             do{
                 age = findAge(dateOfBirth);
                 System.out.println(age);
                 if (age < 4 || age > 17) {
                     System.out.println("No Schools Available\n");
-                    dateOfBirth = getInput();
+                    dateOfBirth = getStringInput();
+                    checkExit(dateOfBirth);
                 }
                 else
                 {
@@ -73,9 +81,16 @@ public class Main {
                 System.out.println("Sorry Class for grade " + grade + "is full try another student");
             }
 
-
         }
 
+    }
+
+    private static void checkExit(String check) {
+        if(check.equalsIgnoreCase("x"))
+        {
+            System.out.println("Exiting School Admissions App.");
+            exit(0);
+        }
     }
 
     private static School getSchoolObject(SchoolType schoolType) {
@@ -131,8 +146,7 @@ public class Main {
         return localYear - birthYear;
     }
 
-    private static String getInput() {
-        Scanner scanner = new Scanner(System.in);
+    private static String getStringInput() {
         return scanner.nextLine();
     }
 
