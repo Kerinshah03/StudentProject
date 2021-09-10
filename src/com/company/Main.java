@@ -81,6 +81,9 @@ public class Main {
                 System.out.println("Sorry Class for grade " + grade + "is full try another student");
             }
 
+            //Find out Fees as per Grade Type of Student
+            double fees = school.chargefees(student);
+            System.out.println("Fees charged for the student is  : " + fees);
         }
 
     }
@@ -139,12 +142,11 @@ public class Main {
 
         LocalDate localDate = LocalDate.now();
         int localYear = localDate.getYear();
-        System.out.println(localYear);
 
         int birthYear = Integer.parseInt(dateOfBirth.substring(6,10));
-        System.out.println(birthYear);
         return localYear - birthYear;
     }
+
 
     private static String getStringInput() {
         return scanner.nextLine();
